@@ -1,6 +1,8 @@
 import numpy as np
 import math
 from PIL import Image
+import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
 
 class SelfOrganizingMaps(object):
     
@@ -54,7 +56,7 @@ class SelfOrganizingMaps(object):
         
         for i in range(self.num_iters):
             
-            if i%2 == 0:
+            if i%20 == 0:
                 print("Training iteration: ", i)
                 
             for j in range(len(train_set)):
@@ -68,5 +70,39 @@ class SelfOrganizingMaps(object):
         im.show()      
         return
     
+    
+    def distance_marix_optim(self, X):
+        M,_ = np.shape(X)
+        L1,L2,_ = np.shape(self.weights)
+        X2 = np.sum(X**2, axis=1).reshape((M,1,1))
+        W2 = np.sum(self.weights**2, axis=2).reshape((L1,L2,1))
+        WX = self.weights.dot(X.T)
+        dm = W2 - 2*WX + X2.T
+        return dm
+        
+    def get_best_indices(self, X):
+        dm = self.distance_marix_optim(X)
+        indices = np.argmin(dm,axis=2)
+        return indices
+        
+    def show_best_indices(self, X, indices=None):
+        if indices is None:
+            indices = self.get_best_indices(X)
+            
+    def plot_mxn(self, m, n, X, fileName):
+        plt.gray()
+        fig = plt.figure(figsize=(12, 12))
+        gs = gridspec.GridSpec(m, n)
+        gs.update(wspace=0.05, hspace=0.05)
+        for i in range(m):
+            for j in range(n):
+                img = X[i,j]
+                ax = plt.subplot(gs[i*m+j])
+                plt.axis('off')
+                ax.set_xticklabels([])
+                ax.set_yticklabels([])
+                #ax.set_aspect('equal')
+                plt.imshow(img.reshape((28,28)))
+        plt.savefig(fileName)
     
     #######################################################################################
