@@ -35,7 +35,10 @@ class PCA(object):
         Therefore, 
         T = XV = USV'V = USI = US
         '''
-        X_std = (X - np.mean(X, axis=0))/(np.std(X, axis=0)+1e-13)
+        if svd:
+            X_std = X
+        else:
+            X_std = (X - np.mean(X, axis=0))/(np.std(X, axis=0)+1e-13)
         if (svd):
             print ("Implementation with SVD")
             [self.U, self.s, self.Vt] = np.linalg.svd(X_std)
@@ -68,7 +71,7 @@ class PCA(object):
         '''
         return np.cumsum(self.variance_ratio)/np.sum(self.variance_ratio)
             
-    def X_projected (self, r):
+    def X_projected (self, dataset, r):
             
         '''
         Returns the data X projected along the first r principal components
@@ -78,7 +81,7 @@ class PCA(object):
             r = self.dim
         X_proj = np.zeros((r, self.N))
         P_reduce = self.V[:,0:r]
-        X_proj = self.X.dot(P_reduce)
+        X_proj = dataset.dot(P_reduce)
         return X_proj
             
             
