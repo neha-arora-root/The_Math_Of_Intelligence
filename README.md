@@ -14,3 +14,4 @@ Week 2: Second Order Optimizations (Newton's method for second order optimizatio
 Week 3: Regularization techniques (Ridge(L2) and Lasso(L1) regularization and their comparison)  
 Week 4: Neural Networks (Kohonen's Self Organizing Maps)  
 Week 5: Principal Component Analysis  
+Week 6: Naive Bayes Classifier (Spam classification using bag of words and tf-idf approaches)  
